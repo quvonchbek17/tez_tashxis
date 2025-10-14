@@ -9,7 +9,7 @@ import { Request } from 'express';
 import { AuthService } from '../auth.service';
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class AdminGuard implements CanActivate {
   constructor(private authService: AuthService) { }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -22,13 +22,13 @@ export class JwtAuthGuard implements CanActivate {
     try {
       const payload = await this.authService.verify(token);
       const userId = payload.id;
-      let user = await this.authService.validateUser(userId);
+      let user = await this.authService.validateAdmin(userId);
       if (!user) {
-        throw new HttpException("Doctor topilmadi", HttpStatus.BAD_REQUEST);
+        throw new HttpException("Admin topilmadi", HttpStatus.FORBIDDEN);
       }
       request.user = user;
     } catch (error) {
-      throw new HttpException(error.message, error.status || HttpStatus.BAD_REQUEST);
+      throw new HttpException(error.message, error.status || HttpStatus.FORBIDDEN);
     }
     return true;
   }

@@ -1,17 +1,16 @@
 import { MongooseModule } from "@nestjs/mongoose";
-import { Advice, AdviceSchema, DiagnosisStatistic, DiagnosisStatisticSchema, Disease, DiseaseAdvice, DiseaseAdviceSchema, DiseaseDrug, DiseaseDrugSchema, DiseaseSchema, Doctor, DoctorSchema, Drug, DrugSchema, Patient, PatientSchema } from "./schemas";
+import { Advice, AdviceSchema } from "./schemas/advices.schema";
+import { Admin, AdminSchema } from "./schemas/admins.schema";
+import { Disease, DiseaseSchema } from "./schemas/diseases.schema";
+import { Doctor, DoctorSchema } from "./schemas/doctors.schema";
+import { Drug, DrugSchema } from "./schemas/drugs.schema";
 
 const schemas = [
-    MongooseModule.forFeature([
-        {name: Advice.name, schema: AdviceSchema},
-        {name: DiagnosisStatistic.name, schema: DiagnosisStatisticSchema},
-        {name: DiseaseAdvice.name, schema: DiseaseAdviceSchema},
-        {name: DiseaseDrug.name, schema: DiseaseDrugSchema},
-        {name: Disease.name, schema: DiseaseSchema},
-        {name: Doctor.name, schema: DoctorSchema},
-        {name: Drug.name, schema: DrugSchema},
-        {name: Patient.name, schema: PatientSchema}
-    ])
+    MongooseModule.forFeature([{ name: Advice.name, schema: AdviceSchema }]),
+    MongooseModule.forFeature([{ name: Admin.name, schema: AdminSchema }]),
+    MongooseModule.forFeature([{ name: Disease.name, schema: DiseaseSchema }]),
+    MongooseModule.forFeature([{ name: Doctor.name, schema: DoctorSchema }]),
+    MongooseModule.forFeature([{ name: Drug.name, schema: DrugSchema }])
 ]
 
 export default schemas

@@ -1,25 +1,45 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Doctor } from './doctors.schema';
 
 export type DiseaseDocument = Disease & Document;
 
 @Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Disease {
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Doctor', required: true })
-  doctor_id: MongooseSchema.Types.ObjectId;
-
   @Prop({ required: true })
   name: string;
 
-  @Prop()
-  icd_code?: string;
+  @Prop({ required: true })
+  icd: string;
 
-  @Prop()
-  notes?: string;
+  @Prop({
+    type: [
+      {
+        id: { type: Types.ObjectId, ref: 'Drug', required: true },
+        default: { type: Boolean, default: false },
+      },
+    ],
+  })
+  drugs: {
+    id: Types.ObjectId;
+    default: boolean;
+  }[];
 
-  @Prop({ default: true })
-  is_active: boolean;
+  @Prop({
+    type: [
+      {
+        id: { type: Types.ObjectId, ref: 'Advice', required: true },
+        default: { type: Boolean, default: false },
+      },
+    ],
+  })
+  advices: {
+    id: Types.ObjectId;
+    default: boolean;
+  }[];
+
+  @Prop({ type: Types.ObjectId, ref: 'Doctor', required: true })
+  doctor: Types.ObjectId;
 }
 
 export const DiseaseSchema = SchemaFactory.createForClass(Disease);
-DiseaseSchema.index({ doctor_id: 1, name: 1 }, { unique: true });

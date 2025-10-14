@@ -1,9 +1,12 @@
 import { appConfig, mongoConfig } from '@configs';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { SyncModule, MongoModule } from '@modules';
+import { MongoModule } from '@modules';
 import { AuthModule } from 'modules/auth';
 import { DoctorsModule } from 'modules/doctors';
+import { AdvicesModule } from 'modules/advices';
+import { DrugsModule } from 'modules/drugs';
+import { DiseasesModule } from 'modules/diseases';
 
 @Module({
   imports: [
@@ -13,8 +16,10 @@ import { DoctorsModule } from 'modules/doctors';
     }),
     AuthModule,
     MongoModule,
-    SyncModule,
     DoctorsModule,
+    AdvicesModule,
+    DrugsModule,
+    DiseasesModule,
   ]
 })
 export class AppModule { }

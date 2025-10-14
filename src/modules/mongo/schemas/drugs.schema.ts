@@ -1,28 +1,25 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document, Schema as MongooseSchema } from 'mongoose';
+import { Document, Types } from 'mongoose';
+import { Doctor } from './doctors.schema';
 
 export type DrugDocument = Drug & Document;
 
-@Schema({ timestamps: { createdAt: 'created_at' } })
+@Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
 export class Drug {
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Doctor', required: true })
-  doctor_id: MongooseSchema.Types.ObjectId;
-
   @Prop({ required: true })
   name: string;
 
-  @Prop()
-  form?: string; // tablet, syrup, injection
+  @Prop({ required: true })
+  dose: string;
+
+  @Prop({ required: true })
+  minAge: number;
 
   @Prop()
-  dosage?: string; // 500mg, 5ml, etc.
+  maxAge?: number;
 
-  @Prop()
-  instructions?: string;
-
-  @Prop({ default: true })
-  is_active: boolean;
+  @Prop({ type: Types.ObjectId, ref: 'Doctor', required: true })
+  doctor: Types.ObjectId;
 }
 
 export const DrugSchema = SchemaFactory.createForClass(Drug);
-DrugSchema.index({ doctor_id: 1, name: 1 }, { unique: true });

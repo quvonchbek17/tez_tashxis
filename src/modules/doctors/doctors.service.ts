@@ -49,7 +49,7 @@ export class DoctorsService {
   async findAll() {
     try {
       const doctors = await this.doctorsModel
-        .find({ role: { $ne: "admin" } })
+        .find()
         .select('-password')
         .exec();
       return {

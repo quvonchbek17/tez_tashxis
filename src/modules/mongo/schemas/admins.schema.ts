@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
-export type DoctorDocument = Doctor & Document;
+
+export type AdminDocument = Admin & Document;
 
 @Schema({ timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } })
-export class Doctor {
+export class Admin {
   @Prop({ required: true, unique: true })
-  phone: string; // +998XXXXXXXXX
+  phone: string;
 
   @Prop({ required: true, unique: true })
   login: string;
@@ -16,12 +17,6 @@ export class Doctor {
   @Prop({ required: true })
   password: string;
 
-  @Prop()
-  specialization?: string;
-
-  @Prop()
-  license_number?: string;
-
   @Prop({ default: true })
   is_active: boolean;
 
@@ -29,4 +24,4 @@ export class Doctor {
   last_login_at?: Date;
 }
 
-export const DoctorSchema = SchemaFactory.createForClass(Doctor);
+export const AdminSchema = SchemaFactory.createForClass(Admin);
