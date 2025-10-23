@@ -4,17 +4,23 @@ import { DiagnosesController } from './diagnoses.controller';
 import { MinioModule } from 'nestjs-minio-client';
 import { AuthModule } from 'modules/auth';
 import { MongoModule } from 'modules/mongo';
-import { minioConfig } from '@configs';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    MongoModule, AuthModule,
-    MinioModule.register({
-      endPoint: minioConfig().endPoint,
-      port: minioConfig().port,
-      useSSL: false,
-      accessKey: minioConfig().accessKey,
-      secretKey: minioConfig().secretKey,
+    MongoModule,
+    AuthModule,
+    ConfigModule, // <-- kerak
+    MinioModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        endPoint: configService.get<string>('minio.endPoint'),
+        port: parseInt(configService.get<string>('minio.port'), 10),
+        useSSL: false,
+        accessKey: configService.get<string>('minio.accessKey'),
+        secretKey: configService.get<string>('minio.secretKey'),
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [DiagnosesController],
