@@ -5,6 +5,7 @@ import { Model, Types } from 'mongoose';
 import { Diagnosis, DiagnosisDocument } from '../mongo/schemas/diagnosis.schema';
 import * as path from 'path';
 import * as crypto from 'crypto';
+import { minioConfig } from '@configs';
 
 @Injectable()
 export class DiagnosesService {
@@ -30,7 +31,7 @@ export class DiagnosesService {
             { 'Content-Type': file.mimetype },
         );
 
-        const fileUrl = `${process.env.MINIO_PUBLIC_URL || 'http://localhost:9000'}/${this.bucketName}/${fileName}`;
+        const fileUrl = `${minioConfig().minioPublicUrl || 'http://localhost:9000'}/${this.bucketName}/${fileName}`;
 
         const diagnosis = await this.diagnosisModel.create({
             date: new Date(),
