@@ -6,11 +6,13 @@ import { Diagnosis, DiagnosisDocument } from '../mongo/schemas/diagnosis.schema'
 import * as path from 'path';
 import * as crypto from 'crypto';
 import { minioConfig } from '@configs';
+import { Patient, PatientDocument } from 'modules/mongo';
 
 @Injectable()
 export class DiagnosesService {
     constructor(
         @InjectModel(Diagnosis.name) private diagnosisModel: Model<DiagnosisDocument>,
+        @InjectModel(Patient.name) private patientModel: Model<PatientDocument>,
         private readonly minioService: MinioService,
     ) { }
 
@@ -19,6 +21,12 @@ export class DiagnosesService {
     async uploadDiagnosis(file: Express.Multer.File, doctor: string, patient?: string) {
         if (!file) throw new BadRequestException('Fayl yuklanmagan');
         if (!doctor) throw new BadRequestException('date yoki doctor kiritilmagan');
+        const patientData = await this.patientModel.findOne({ _id: patient, doctor: doctor })
+
+        if (!patientData) {
+            throw new NotFoundException("Bemor topilmadi")
+        }
+
 
         const fileExt = path.extname(file.originalname);
         const fileName = `${crypto.randomUUID()}${fileExt}`;
@@ -34,11 +42,16 @@ export class DiagnosesService {
         const fileUrl = `${minioConfig().minioPublicUrl || 'http://localhost:9000'}/${this.bucketName}/${fileName}`;
 
         const diagnosis = await this.diagnosisModel.create({
-            date: new Date(),
+            date: new Date().toISOString(),
             file: fileUrl,
             doctor: new Types.ObjectId(doctor),
             patient: patient ? new Types.ObjectId(patient) : undefined,
         });
+
+        await this.patientModel.updateOne(
+            { _id: patient },
+            { $push: { diagnoses: diagnosis._id } },
+        );
 
         return diagnosis;
     }

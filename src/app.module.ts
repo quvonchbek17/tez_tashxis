@@ -1,7 +1,7 @@
 import { appConfig, minioConfig, mongoConfig } from '@configs';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { MongoModule } from '@modules';
+import { MongoModule, PatientsModule } from '@modules';
 import { AuthModule } from 'modules/auth';
 import { DoctorsModule } from 'modules/doctors';
 import { AdvicesModule } from 'modules/advices';
@@ -21,6 +21,7 @@ import { DiagnosesModule } from 'modules/diagnoses';
     AdvicesModule,
     DrugsModule,
     DiseasesModule,
+    PatientsModule,
     DiagnosesModule
   ]
 })

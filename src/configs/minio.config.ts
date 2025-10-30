@@ -16,6 +16,6 @@ export const minioConfig = registerAs(
     port: parseInt(process.env.MINIO_PORT || '9000', 10),
     accessKey: process.env.MINIO_ACCESS_KEY || "admin",
     secretKey: process.env.MINIO_SECRET_KEY || "password",
-    minioPublicUrl: `http://${process.env.MINIO_ENDPOINT}:${parseInt(process.env.MINIO_PORT || '9000', 10)}`,
+    minioPublicUrl: `http://${process.env.MINIO_ENDPOINT||'localhost'}:${parseInt(process.env.MINIO_PORT || '9000', 10)}`,
   }),
 );

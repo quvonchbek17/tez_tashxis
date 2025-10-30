@@ -14,7 +14,7 @@ const schemas = [
     MongooseModule.forFeature([{ name: Doctor.name, schema: DoctorSchema }]),
     MongooseModule.forFeature([{ name: Drug.name, schema: DrugSchema }]),
     MongooseModule.forFeature([{ name: Diagnosis.name, schema: DiagnosisSchema }]),
-    MongooseModule.forFeature([{ name: Patient.name, schema: PatientSchema }]),
+    MongooseModule.forFeature([{ name: Patient.name, schema: PatientSchema }])
 ]
 
 export default schemas
