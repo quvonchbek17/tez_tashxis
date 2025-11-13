@@ -104,4 +104,21 @@ export class PatientsService {
       throw new InternalServerErrorException(error);
     }
   }
+
+  async searchByName(name: string, doctorId: string) {
+  try {
+    const regex = new RegExp(name, 'i');
+    const patients = await this.patientModel
+      .find({ doctor: doctorId, name: { $regex: regex } })
+      .populate('doctor', 'full_name specialization')
+      .populate('diagnoses', 'date file')
+      .exec();
+
+    return { success: true, data: patients };
+  } catch (error) {
+    console.log(error)
+    throw new InternalServerErrorException(error);
+  }
+}
+
 }
